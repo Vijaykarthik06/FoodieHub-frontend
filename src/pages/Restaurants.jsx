@@ -42,7 +42,7 @@ const Restaurants = () => {
           rating: 4.8,
           deliveryTime: 30,
           deliveryFee: 3.99,
-          image: 'https://via.placeholder.com/300x200?text=Sushi+Palace',
+          image: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
           tags: ['japanese', 'sushi', 'asian']
         },
         {
@@ -52,7 +52,7 @@ const Restaurants = () => {
           rating: 4.3,
           deliveryTime: 22,
           deliveryFee: 2.49,
-          image: 'https://via.placeholder.com/300x200?text=Taco+Fiesta',
+          image: 'https://plus.unsplash.com/premium_photo-1661883237884-263e8de8869b?q=80&w=1189&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
           tags: ['mexican', 'tacos', 'burritos']
         },
         {
@@ -62,7 +62,7 @@ const Restaurants = () => {
           rating: 4.6,
           deliveryTime: 28,
           deliveryFee: 3.49,
-          image: 'https://via.placeholder.com/300x200?text=Green+Garden',
+          image: 'https://plus.unsplash.com/premium_photo-1663100289422-99a5e0f8f7a6?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
           tags: ['vegetarian', 'vegan', 'healthy']
         },
         {
@@ -72,7 +72,7 @@ const Restaurants = () => {
           rating: 4.9,
           deliveryTime: 18,
           deliveryFee: 2.99,
-          image: 'https://via.placeholder.com/300x200?text=Sweet+Treats',
+          image: 'https://plus.unsplash.com/premium_photo-1661953124283-76d0a8436b87?q=80&w=1188&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
           tags: ['desserts', 'bakery', 'ice cream']
         }
       ];

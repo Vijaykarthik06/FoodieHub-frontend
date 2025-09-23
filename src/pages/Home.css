@@ -3,12 +3,16 @@
 }
 
 .hero {
-  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-  color: white;
+  background: url('../assets/images/hero-image.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: black;
   padding: 60px 0;
   display: flex;
   align-items: center;
-  min-height: 500px;
+  min-height: 100vh;
+  position: relative;
 }
 
 .hero-content {
@@ -20,14 +24,10 @@
 }
 
 .hero-title {
-  font-size: 48px;
+  font-size: 58px;
   font-weight: 800;
   margin-bottom: 20px;
   line-height: 1.2;
-  background: url(https://images.unsplash.com/photo-1623855244183-52fd8d3ce2f7?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D);
-  background-repeat: no-repeat;
-  background-clip: text;
-  color: transparent;
 }
 
 .hero-subtitle {
@@ -39,14 +39,6 @@
 .hero-cta {
   padding: 15px 30px;
   font-size: 18px;
-}
-
-.hero-image img {
-  width: 50%;
-  height: 20%;
-  margin-left: 400px;
-  border-radius: 10px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
 .section {
@@ -101,26 +93,103 @@
   line-height: 1.6;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .hero-content {
-    grid-template-columns: 1fr;
-    text-align: center;
+    margin-left: 50px;
+    gap: 30px;
   }
-  
+
+  .hero-title {
+    font-size: 42px;
+  }
+
+  .hero-image img {
+    width: 45%;
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero {
+    flex-direction: column;
+    text-align: center;
+    padding: 40px 20px;
+  }
+
+  .hero-content {
+    margin-left: 0;
+    gap: 20px;
+  }
+
   .hero-title {
     font-size: 36px;
   }
-  
-  .hero-image {
-    order: -1;
+
+  .hero-subtitle {
+    font-size: 16px;
   }
-  
+
+  .hero-image img {
+    width: 80%;
+    margin: 20px 0 0 0;
+    height: auto;
+  }
+
   .products-grid,
   .restaurants-grid {
     grid-template-columns: 1fr;
+    gap: 20px;
   }
-  
+
   .how-it-works {
     grid-template-columns: 1fr;
+    gap: 30px;
+  }
+
+  .step {
+    padding: 20px 10px;
+  }
+
+  .step-icon {
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+  }
+
+  .step h3 {
+    font-size: 18px;
+  }
+
+  .step p {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-title {
+    font-size: 28px;
+  }
+
+  .hero-subtitle {
+    font-size: 14px;
+  }
+
+  .hero-cta {
+    font-size: 16px;
+    padding: 12px 25px;
+  }
+
+  .step-icon {
+    width: 45px;
+    height: 45px;
+    font-size: 18px;
+  }
+
+  .step h3 {
+    font-size: 16px;
+  }
+
+  .step p {
+    font-size: 13px;
   }
 }

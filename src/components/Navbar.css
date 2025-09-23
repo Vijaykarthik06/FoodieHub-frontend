@@ -25,6 +25,17 @@
   align-items: center;
 }
 
+/* Highlight active link */
+.nav-link.active {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.nav-cart.active {
+  background-color: var(--secondary);
+}
+
+
 .logo-icon {
   margin-right: 8px;
   font-size: 28px;

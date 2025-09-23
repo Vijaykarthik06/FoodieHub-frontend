@@ -178,8 +178,248 @@ const Menu = () => {
           cookingTime: '2 minutes',
           spicyLevel: 'Mild',
           tags: ['Vegetarian', 'Cold', 'Sweet']
-        }
-      ];
+        },
+        {
+      id: 9,
+      name: 'Chicken Tikka Masala',
+      description: 'Tender chicken pieces in a rich and creamy tomato-based sauce with aromatic Indian spices, served with basmati rice.',
+      price: 13.99,
+      image: 'https://images.unsplash.com/photo-1565557623262-b51c2513a641?q=80&w=1071&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+      images: [
+        'https://images.unsplash.com/photo-1565557623262-b51c2513a641?q=80&w=1071&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        'https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+      ],
+      category: 'indian',
+      ingredients: ['Chicken', 'Tomato sauce', 'Cream', 'Garam masala', 'Ginger', 'Garlic', 'Basmati rice'],
+      nutrition: { calories: 420, protein: '35g', carbs: '25g', fat: '22g' },
+      rating: 4.7,
+      reviews: 189,
+      preparationTime: '25-30 mins',
+      cookingTime: '20-25 minutes',
+      spicyLevel: 'Medium',
+      tags: ['Spicy', 'Popular', 'Creamy']
+    },
+    {
+      id: 10,
+      name: 'Sushi Platter',
+      description: 'Assorted fresh sushi including salmon nigiri, tuna rolls, California rolls, and vegetable maki with wasabi and soy sauce.',
+      price: 18.99,
+      image: 'https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?q=80&w=1127&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+      images: [
+        'https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?q=80&w=1127&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        'https://images.unsplash.com/photo-1617196034796-73dfa7e1f3e3?q=80&w=1171&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+      ],
+      category: 'japanese',
+      ingredients: ['Salmon', 'Tuna', 'Rice', 'Nori', 'Avocado', 'Cucumber', 'Soy sauce', 'Wasabi'],
+      nutrition: { calories: 380, protein: '22g', carbs: '45g', fat: '12g' },
+      rating: 4.8,
+      reviews: 234,
+      preparationTime: '15-20 mins',
+      cookingTime: '10-15 minutes',
+      spicyLevel: 'Mild',
+      tags: ['Fresh', 'Healthy', 'Premium']
+    },
+    {
+      id: 11,
+      name: 'Beef Tacos',
+      description: 'Three soft tortillas filled with seasoned ground beef, lettuce, tomatoes, cheese, and sour cream with a side of salsa.',
+      price: 10.99,
+      image: 'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?q=80&w=1080&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+      images: [
+        'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?q=80&w=1080&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        'https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+      ],
+      category: 'mexican',
+      ingredients: ['Ground beef', 'Tortillas', 'Lettuce', 'Tomato', 'Cheese', 'Sour cream', 'Salsa', 'Taco seasoning'],
+      nutrition: { calories: 520, protein: '28g', carbs: '35g', fat: '28g' },
+      rating: 4.4,
+      reviews: 167,
+      preparationTime: '12-15 mins',
+      cookingTime: '10-12 minutes',
+      spicyLevel: 'Medium',
+      tags: ['Spicy', 'Mexican', 'Popular']
+    },
+    {
+      id: 12,
+      name: 'Pad Thai',
+      description: 'Classic Thai stir-fried rice noodles with shrimp, tofu, bean sprouts, peanuts, and eggs in a tangy tamarind sauce.',
+      price: 11.99,
+      image: 'https://images.unsplash.com/photo-1559314809-0d155014e29e?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+      images: [
+        'https://images.unsplash.com/photo-1559314809-0f9a9d4d159e?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        'https://images.unsplash.com/photo-1617096083745-b2c0d4c9f6b6?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+      ],
+      category: 'thai',
+      ingredients: ['Rice noodles', 'Shrimp', 'Tofu', 'Bean sprouts', 'Peanuts', 'Eggs', 'Tamarind sauce', 'Lime'],
+      nutrition: { calories: 480, protein: '24g', carbs: '65g', fat: '15g' },
+      rating: 4.6,
+      reviews: 198,
+      preparationTime: '15-18 mins',
+      cookingTime: '12-15 minutes',
+      spicyLevel: 'Medium',
+      tags: ['Spicy', 'Thai', 'Noodles']
+    },
+    {
+      id: 13,
+      name: 'BBQ Ribs',
+      description: 'Slow-cooked pork ribs glazed with homemade barbecue sauce, served with coleslaw and french fries.',
+      price: 16.99,
+      image: 'https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=1169&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+      images: [
+        'https://images.unsplash.com/photo-1546833995-6e041cdb3e9c?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        'https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+      ],
+      category: 'american',
+      ingredients: ['Pork ribs', 'BBQ sauce', 'Coleslaw', 'French fries', 'Spices', 'Honey', 'Brown sugar'],
+      nutrition: { calories: 680, protein: '42g', carbs: '45g', fat: '38g' },
+      rating: 4.5,
+      reviews: 276,
+      preparationTime: '30-35 mins',
+      cookingTime: '25-30 minutes',
+      spicyLevel: 'Mild',
+      tags: ['Meat', 'BBQ', 'Popular']
+    },
+    {
+      id: 14,
+      name: 'Mushroom Risotto',
+      description: 'Creamy Arborio rice cooked with assorted wild mushrooms, parmesan cheese, white wine, and fresh herbs.',
+      price: 12.99,
+      image: 'https://images.unsplash.com/photo-1476124369491-e7addf5db371?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+      images: [
+        'https://images.unsplash.com/photo-1476124369491-e7addf5db371?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        'https://images.unsplash.com/photo-1570194065655-a5cbfb05d096?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+      ],
+      category: 'italian',
+      ingredients: ['Arborio rice', 'Wild mushrooms', 'Parmesan cheese', 'White wine', 'Vegetable broth', 'Onion', 'Garlic', 'Herbs'],
+      nutrition: { calories: 420, protein: '14g', carbs: '55g', fat: '16g' },
+      rating: 4.3,
+      reviews: 134,
+      preparationTime: '25-30 mins',
+      cookingTime: '20-25 minutes',
+      spicyLevel: 'Mild',
+      tags: ['Vegetarian', 'Creamy', 'Gourmet']
+    },
+    {
+      id: 15,
+      name: 'Fish and Chips',
+      description: 'Beer-battered cod fillets deep-fried to golden perfection, served with thick-cut fries, tartar sauce, and lemon wedges.',
+      price: 13.99,
+      image: 'https://images.unsplash.com/photo-1579208030886-b937da0925dc?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+      images: [
+        'https://images.unsplash.com/photo-1563379091339-03246963d8af?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        'https://images.unsplash.com/photo-1570194065655-a5cbfb05d096?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+      ],
+      category: 'british',
+      ingredients: ['Cod fillets', 'Beer batter', 'Potatoes', 'Tartar sauce', 'Lemon', 'Parsley', 'Malt vinegar'],
+      nutrition: { calories: 620, protein: '32g', carbs: '48g', fat: '32g' },
+      rating: 4.4,
+      reviews: 189,
+      preparationTime: '20-25 mins',
+      cookingTime: '15-18 minutes',
+      spicyLevel: 'Mild',
+      tags: ['Seafood', 'Crispy', 'Classic']
+    },
+    {
+      id: 16,
+      name: 'Vegetable Stir Fry',
+      description: 'Fresh seasonal vegetables stir-fried in a light soy-ginger sauce, served over steamed jasmine rice.',
+      price: 9.99,
+      image: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?q=80&w=1172&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+      images: [
+        'https://images.unsplash.com/photo-1512058564366-18510be2db19?q=80&w=1172&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        'https://images.unsplash.com/photo-1626700051175-681d3a3b36a0?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+      ],
+      category: 'asian',
+      ingredients: ['Mixed vegetables', 'Bell peppers', 'Broccoli', 'Carrots', 'Soy sauce', 'Ginger', 'Garlic', 'Jasmine rice'],
+      nutrition: { calories: 320, protein: '12g', carbs: '45g', fat: '8g' },
+      rating: 4.2,
+      reviews: 145,
+      preparationTime: '10-12 mins',
+      cookingTime: '8-10 minutes',
+      spicyLevel: 'Mild',
+      tags: ['Vegetarian', 'Healthy', 'Light']
+    },
+    {
+      id: 17,
+      name: 'Chicken Alfredo Pasta',
+      description: 'Fettuccine pasta tossed in a creamy Alfredo sauce with grilled chicken breast, parmesan cheese, and fresh parsley.',
+      price: 14.99,
+      image: 'https://images.unsplash.com/photo-1598866594230-a7c12756260f?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+      images: [
+        'https://images.unsplash.com/photo-1598866594230-a7c12756260f?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        'https://images.unsplash.com/photo-1571997478779-2adcbbe9ab2f?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+      ],
+      category: 'italian',
+      ingredients: ['Fettuccine pasta', 'Chicken breast', 'Heavy cream', 'Parmesan cheese', 'Butter', 'Garlic', 'Parsley'],
+      nutrition: { calories: 580, protein: '38g', carbs: '45g', fat: '28g' },
+      rating: 4.6,
+      reviews: 223,
+      preparationTime: '20-25 mins',
+      cookingTime: '15-18 minutes',
+      spicyLevel: 'Mild',
+      tags: ['Creamy', 'Popular', 'Comfort Food']
+    },
+    {
+      id: 18,
+      name: 'Mango Lassi',
+      description: 'Refreshing traditional Indian yogurt drink made with sweet mango pulp, yogurt, and a hint of cardamom.',
+      price: 4.99,
+      image: 'https://images.unsplash.com/photo-1600271886742-f049cd451bba?q=80&w=1174&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+      images: [
+        'https://images.unsplash.com/photo-1600271886742-f049cd451bba?q=80&w=1174&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        'https://images.unsplash.com/photo-1570194065655-a5cbfb05d096?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+      ],
+      category: 'beverages',
+      ingredients: ['Mango pulp', 'Yogurt', 'Milk', 'Sugar', 'Cardamom', 'Ice'],
+      nutrition: { calories: 180, protein: '8g', carbs: '28g', fat: '4g' },
+      rating: 4.7,
+      reviews: 167,
+      preparationTime: '3-5 mins',
+      cookingTime: '2 minutes',
+      spicyLevel: 'Mild',
+      tags: ['Vegetarian', 'Refreshing', 'Sweet']
+    },
+    {
+      id: 19,
+      name: 'Beef Pho',
+      description: 'Traditional Vietnamese noodle soup with slow-cooked beef broth, rice noodles, thinly sliced beef, and fresh herbs.',
+      price: 11.99,
+      image: 'https://images.unsplash.com/photo-1550304943-4f24f54ddde9?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+      images: [
+        'https://images.unsplash.com/photo-1550304943-4f24f54ddde9?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        'https://images.unsplash.com/photo-1582878826620-57d3453e329f?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+      ],
+      category: 'vietnamese',
+      ingredients: ['Beef broth', 'Rice noodles', 'Beef slices', 'Bean sprouts', 'Basil', 'Mint', 'Lime', 'Chili'],
+      nutrition: { calories: 380, protein: '26g', carbs: '42g', fat: '12g' },
+      rating: 4.5,
+      reviews: 198,
+      preparationTime: '15-20 mins',
+      cookingTime: '12-15 minutes',
+      spicyLevel: 'Medium',
+      tags: ['Soup', 'Healthy', 'Aromatic']
+    },
+    {
+      id: 20,
+      name: 'Falafel Wrap',
+      description: 'Crispy falafel balls wrapped in warm pita bread with fresh vegetables, tahini sauce, and pickled turnips.',
+      price: 8.99,
+      image: 'https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?q=80&w=1171&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+      images: [
+        'https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?q=80&w=1171&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        'https://images.unsplash.com/photo-1572802419224-296b0aeee0d9?q=80&w=1115&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+      ],
+      category: 'mediterranean',
+      ingredients: ['Falafel', 'Pita bread', 'Lettuce', 'Tomato', 'Cucumber', 'Tahini sauce', 'Pickles', 'Parsley'],
+      nutrition: { calories: 420, protein: '15g', carbs: '55g', fat: '16g' },
+      rating: 4.3,
+      reviews: 156,
+      preparationTime: '10-12 mins',
+      cookingTime: '8-10 minutes',
+      spicyLevel: 'Mild',
+      tags: ['Vegetarian', 'Healthy', 'Mediterranean']
+    }
+  ];
 
        setProducts(mockProducts);
       setFilteredProducts(mockProducts);
