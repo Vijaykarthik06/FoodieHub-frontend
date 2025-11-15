@@ -8,10 +8,7 @@ const Login = () => {
     email: '',
     password: ''
   });
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
-  
-  const { login } = useAuth();
+  const { login, loading, error, setError } = useAuth();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -19,31 +16,19 @@ const Login = () => {
       ...formData,
       [e.target.name]: e.target.value
     });
+    // Clear error when user starts typing
+    if (error) setError('');
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
-    setLoading(true);
     
     try {
-      // Simulate API call
-      setTimeout(() => {
-        // Mock response
-        const userData = {
-          id: 1,
-          name: 'John Doe',
-          email: formData.email
-        };
-        const token = 'mock-jwt-token';
-        
-        login(userData, token);
-        navigate('/');
-      }, 1000);
+      await login(formData.email, formData.password);
+      navigate('/');
     } catch (err) {
-      setError('Failed to log in. Please check your credentials.');
-    } finally {
-      setLoading(false);
+      // Error is already set in the context
+      console.error('Login error:', err);
     }
   };
 

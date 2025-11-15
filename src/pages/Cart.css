@@ -173,7 +173,7 @@
 .summary-row.total {
   font-size: 1.2rem;
   font-weight: 700;
-  color: var(--dark);
+  color: var(--primary);
   margin-top: 15px;
   padding-top: 15px;
   border-top: 1px solid #eee;

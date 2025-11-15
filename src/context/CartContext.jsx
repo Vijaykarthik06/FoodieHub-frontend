@@ -8,11 +8,34 @@ export const useCart = () => {
 
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
+  const [cartRestaurant, setCartRestaurant] = useState(null);
 
   useEffect(() => {
     const savedCart = localStorage.getItem('cartItems');
+    const savedRestaurant = localStorage.getItem('cartRestaurant');
+    
     if (savedCart) {
-      setCartItems(JSON.parse(savedCart));
+      try {
+        setCartItems(JSON.parse(savedCart));
+      } catch (error) {
+        console.error('Error parsing cart items:', error);
+        setCartItems([]);
+      }
+    }
+    
+    if (savedRestaurant) {
+      try {
+        const parsedRestaurant = JSON.parse(savedRestaurant);
+        // Validate that parsedRestaurant is an object and has required properties
+        if (parsedRestaurant && typeof parsedRestaurant === 'object') {
+          setCartRestaurant(parsedRestaurant);
+        } else {
+          setCartRestaurant(null);
+        }
+      } catch (error) {
+        console.error('Error parsing cart restaurant:', error);
+        setCartRestaurant(null);
+      }
     }
   }, []);
 
@@ -20,8 +43,47 @@ export const CartProvider = ({ children }) => {
     localStorage.setItem('cartItems', JSON.stringify(cartItems));
   }, [cartItems]);
 
-  const addToCart = (product, quantity = 1) => {
+  useEffect(() => {
+    if (cartRestaurant) {
+      localStorage.setItem('cartRestaurant', JSON.stringify(cartRestaurant));
+    } else {
+      localStorage.removeItem('cartRestaurant');
+    }
+  }, [cartRestaurant]);
+
+  // Function to set the current restaurant for the cart
+  const setRestaurant = (restaurant) => {
+    if (restaurant && typeof restaurant === 'object') {
+      setCartRestaurant(restaurant);
+    } else {
+      console.error('Invalid restaurant data:', restaurant);
+      setCartRestaurant(null);
+    }
+  };
+
+  // Function to clear the restaurant (when cart is cleared)
+  const clearRestaurant = () => {
+    setCartRestaurant(null);
+  };
+
+  const addToCart = (product, quantity = 1, restaurant) => {
     setCartItems(prevItems => {
+      // Check if we're adding from a different restaurant
+      if (cartRestaurant && restaurant && cartRestaurant._id !== restaurant._id) {
+        if (window.confirm('You have items from a different restaurant. Would you like to clear your cart and add this item?')) {
+          // Clear cart and add new item with new restaurant
+          setRestaurant(restaurant);
+          return [{ ...product, quantity, restaurant: restaurant._id }];
+        } else {
+          return prevItems;
+        }
+      }
+      
+      // If no restaurant is set yet, set it
+      if (!cartRestaurant && restaurant) {
+        setRestaurant(restaurant);
+      }
+
       const existingItem = prevItems.find(item => item.id === product.id);
       
       if (existingItem) {
@@ -32,12 +94,25 @@ export const CartProvider = ({ children }) => {
         );
       }
       
-      return [...prevItems, { ...product, quantity }];
+      return [...prevItems, { 
+        ...product, 
+        quantity, 
+        restaurant: restaurant ? restaurant._id : null 
+      }];
     });
   };
 
   const removeFromCart = (productId) => {
-    setCartItems(prevItems => prevItems.filter(item => item.id !== productId));
+    setCartItems(prevItems => {
+      const updatedItems = prevItems.filter(item => item.id !== productId);
+      
+      // If cart is empty after removal, clear the restaurant
+      if (updatedItems.length === 0) {
+        clearRestaurant();
+      }
+      
+      return updatedItems;
+    });
   };
 
   const updateQuantity = (productId, quantity) => {
@@ -55,6 +130,7 @@ export const CartProvider = ({ children }) => {
 
   const clearCart = () => {
     setCartItems([]);
+    clearRestaurant();
   };
 
   const getCartTotal = () => {
@@ -67,12 +143,15 @@ export const CartProvider = ({ children }) => {
 
   const value = {
     cartItems,
+    cartRestaurant,
     addToCart,
     removeFromCart,
     updateQuantity,
     clearCart,
     getCartTotal,
-    getCartItemsCount
+    getCartItemsCount,
+    setCartRestaurant: setRestaurant,
+    clearRestaurant
   };
 
   return (

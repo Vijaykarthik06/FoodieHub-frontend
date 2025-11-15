@@ -40,7 +40,7 @@ const Footer = () => {
           <div className="footer-section">
             <h4 className="footer-heading">Contact Us</h4>
             <ul className="footer-links">
-              <li>📞 +1 (123) 456-7890</li>
+              <li>📞 +91 7667360699</li>
               <li>✉️ support@foodiehub.com</li>
               <li>🏠 123 Food Street, Tasty City</li>
             </ul>

@@ -168,7 +168,7 @@
 }
 
 .tag {
-  background: #4ecdc4;
+  background: var(--primary);
   color: white;
   padding: 5px 15px;
   border-radius: 20px;

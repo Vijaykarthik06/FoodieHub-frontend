@@ -10,10 +10,8 @@ const Register = () => {
     password: '',
     confirmPassword: ''
   });
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
-  
-  const { login } = useAuth();
+  const [validationError, setValidationError] = useState('');
+  const { register, loading, error, setError } = useAuth();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -21,36 +19,24 @@ const Register = () => {
       ...formData,
       [e.target.name]: e.target.value
     });
+    // Clear errors when user starts typing
+    if (error) setError('');
+    if (validationError) setValidationError('');
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
     
     if (formData.password !== formData.confirmPassword) {
-      return setError('Passwords do not match');
+      return setValidationError('Passwords do not match');
     }
     
-    setLoading(true);
-    
     try {
-      // Simulate API call
-      setTimeout(() => {
-        // Mock response
-        const userData = {
-          id: 1,
-          name: formData.name,
-          email: formData.email
-        };
-        const token = 'mock-jwt-token';
-        
-        login(userData, token);
-        navigate('/');
-      }, 1000);
+      await register(formData.name, formData.email, formData.password);
+      navigate('/');
     } catch (err) {
-      setError('Failed to create an account. Please try again.');
-    } finally {
-      setLoading(false);
+      // Error is already set in the context
+      console.error('Registration error:', err);
     }
   };
 
@@ -58,7 +44,9 @@ const Register = () => {
     <div className="auth-container">
       <div className="auth-card">
         <h2 className="auth-title">Create an Account</h2>
-        {error && <div className="alert alert-error">{error}</div>}
+        {(error || validationError) && (
+          <div className="alert alert-error">{error || validationError}</div>
+        )}
         <form onSubmit={handleSubmit} className="auth-form">
           <div className="form-group">
             <label htmlFor="name" className="form-label">Full Name</label>

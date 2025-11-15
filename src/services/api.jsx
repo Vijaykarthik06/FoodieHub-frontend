@@ -1,7 +1,9 @@
+// src/services/api.js
 import axios from 'axios';
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000/api';
 
+// Create axios instance
 const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
@@ -64,11 +66,28 @@ export const restaurantsAPI = {
 
 // Orders API
 export const ordersAPI = {
-  getAll: () => api.get('/orders'),
-  getById: (id) => api.get(`/orders/${id}`),
-  create: (orderData) => api.post('/orders', orderData),
-  update: (id, orderData) => api.put(`/orders/${id}`, orderData),
-  cancel: (id) => api.delete(`/orders/${id}`),
+  // Get user's orders
+  getMyOrders: (filters = {}) => 
+    api.get('/orders/myorders', { params: filters }),
+  
+  // Get single order
+  getById: (orderId) => 
+    api.get(`/orders/${orderId}`),
+  
+  // Create new order
+  create: (orderData) => 
+    api.post('/orders', orderData),
+  
+  // Cancel order
+  cancel: (orderId, reason) => 
+    api.put(`/orders/${orderId}/cancel`, { cancellationReason: reason }),
+  
+  // Get all orders (Admin)
+  getAll: (filters = {}) => 
+    api.get('/orders', { params: filters }),
+  
+  updateStatus: (orderId, status, cancellationReason) => 
+    api.put(`/orders/${orderId}/status`, { status, cancellationReason })
 };
 
 // Cart API
@@ -80,4 +99,5 @@ export const cartAPI = {
   clear: () => api.delete('/cart'),
 };
 
+// Export the api instance as default
 export default api;

@@ -8,55 +8,82 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Menu from './pages/Menu';
+import GeneralMenu from './pages/GeneralMenu';
 import Restaurants from './pages/Restaurants';
-import ProductDetail from './pages/ProductDetail'; // Fixed import name
+import ProductDetail from './pages/ProductDetail';
 import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import Orders from './pages/Orders';
 import Profile from './pages/Profile';
 import ProtectedRoute from './components/ProtectedRoute';
+import OrderSuccess from './pages/OrderSuccess';
+import ScrollToTop from './components/ScrollToTop';
 import './App.css';
+
+// Correct basename for GitHub Pages
+const basename = process.env.NODE_ENV === 'production' ? '/FoodieHub' : '';
 
 function App() {
   return (
-    <Router>
+    <Router basename={basename}>
+      <ScrollToTop/>
       <AuthProvider>
         <CartProvider>
           <div className="App">
             <Navbar />
             <main className="main-content">
               <Routes>
+
+                {/* Public Routes */}
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
-                <Route path="/menu" element={<Menu />} />
+                <Route path="/menu" element={<GeneralMenu />} />
+                <Route path="/menu/:restaurantId" element={<Menu />} />
                 <Route path="/restaurants" element={<Restaurants />} />
-                <Route path="/product/:id" element={<ProductDetail />} /> {/* Fixed component name */}
+                <Route path="/product/:id" element={<ProductDetail />} />
                 <Route path="/cart" element={<Cart />} />
+                <Route path="/order-success" element={<OrderSuccess />} />
+
+                {/* Protected Routes */}
                 <Route 
-                  path="/checkout" 
+                  path="/checkout"
                   element={
                     <ProtectedRoute>
                       <Checkout />
                     </ProtectedRoute>
-                  } 
+                  }
                 />
+
                 <Route 
-                  path="/orders" 
+                  path="/orders"
                   element={
                     <ProtectedRoute>
                       <Orders />
                     </ProtectedRoute>
-                  } 
+                  }
                 />
+
                 <Route 
-                  path="/profile" 
+                  path="/profile"
                   element={
                     <ProtectedRoute>
                       <Profile />
                     </ProtectedRoute>
-                  } 
+                  }
                 />
+
+                {/* 404 */}
+                <Route 
+                  path="*"
+                  element={
+                    <div className="page-not-found">
+                      <h2>404 - Page Not Found</h2>
+                      <p>The page you're looking for doesn't exist.</p>
+                    </div>
+                  }
+                />
+
               </Routes>
             </main>
             <Footer />
