@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import Navbar from './components/Navbar';
@@ -22,7 +22,7 @@ import './App.css';
 
 function App() {
   return (
-    <>
+    <BrowserRouter basename="/FoodieHub">
       <ScrollToTop />
 
       <AuthProvider>
@@ -34,7 +34,6 @@ function App() {
             <main className="main-content">
               <Routes>
 
-                {/* Public Routes */}
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
@@ -45,7 +44,6 @@ function App() {
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/order-success" element={<OrderSuccess />} />
 
-                {/* Protected Routes */}
                 <Route
                   path="/checkout"
                   element={
@@ -73,7 +71,6 @@ function App() {
                   }
                 />
 
-                {/* 404 Page */}
                 <Route
                   path="*"
                   element={
@@ -92,7 +89,7 @@ function App() {
 
         </CartProvider>
       </AuthProvider>
-    </>
+    </BrowserRouter>
   );
 }
 
