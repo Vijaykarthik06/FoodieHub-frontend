@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import Navbar from './components/Navbar';
@@ -20,12 +20,9 @@ import OrderSuccess from './pages/OrderSuccess';
 import ScrollToTop from './components/ScrollToTop';
 import './App.css';
 
-// Correct basename for GitHub Pages → Repo name = FoodieHub
-const basename = process.env.NODE_ENV === "production" ? "/FoodieHub" : "";
-
 function App() {
   return (
-    <Router basename={basename}>
+    <>
       <ScrollToTop />
 
       <AuthProvider>
@@ -76,7 +73,7 @@ function App() {
                   }
                 />
 
-                {/* 404 Fallback */}
+                {/* 404 Page */}
                 <Route
                   path="*"
                   element={
@@ -95,8 +92,7 @@ function App() {
 
         </CartProvider>
       </AuthProvider>
-
-    </Router>
+    </>
   );
 }
 
