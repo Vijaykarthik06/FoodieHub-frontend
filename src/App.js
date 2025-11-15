@@ -20,17 +20,20 @@ import OrderSuccess from './pages/OrderSuccess';
 import ScrollToTop from './components/ScrollToTop';
 import './App.css';
 
-// Correct basename for GitHub Pages
-const basename = process.env.NODE_ENV === 'production' ? '/FoodieHub' : '';
+// Correct basename for GitHub Pages → Repo name = FoodieHub
+const basename = process.env.NODE_ENV === "production" ? "/FoodieHub" : "";
 
 function App() {
   return (
     <Router basename={basename}>
-      <ScrollToTop/>
+      <ScrollToTop />
+
       <AuthProvider>
         <CartProvider>
+
           <div className="App">
             <Navbar />
+
             <main className="main-content">
               <Routes>
 
@@ -46,7 +49,7 @@ function App() {
                 <Route path="/order-success" element={<OrderSuccess />} />
 
                 {/* Protected Routes */}
-                <Route 
+                <Route
                   path="/checkout"
                   element={
                     <ProtectedRoute>
@@ -55,7 +58,7 @@ function App() {
                   }
                 />
 
-                <Route 
+                <Route
                   path="/orders"
                   element={
                     <ProtectedRoute>
@@ -64,7 +67,7 @@ function App() {
                   }
                 />
 
-                <Route 
+                <Route
                   path="/profile"
                   element={
                     <ProtectedRoute>
@@ -73,8 +76,8 @@ function App() {
                   }
                 />
 
-                {/* 404 */}
-                <Route 
+                {/* 404 Fallback */}
+                <Route
                   path="*"
                   element={
                     <div className="page-not-found">
@@ -86,10 +89,13 @@ function App() {
 
               </Routes>
             </main>
+
             <Footer />
           </div>
+
         </CartProvider>
       </AuthProvider>
+
     </Router>
   );
 }
