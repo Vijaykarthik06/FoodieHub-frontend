@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
+import { useAuth } from './context/AuthContext';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Home from './pages/Home';
@@ -22,18 +23,17 @@ import './App.css';
 
 function App() {
   return (
-    <BrowserRouter basename="/FoodieHub">
+    // REMOVED basename completely for development
+    <BrowserRouter>
       <ScrollToTop />
 
       <AuthProvider>
         <CartProvider>
-
           <div className="App">
             <Navbar />
 
             <main className="main-content">
               <Routes>
-
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
@@ -80,13 +80,11 @@ function App() {
                     </div>
                   }
                 />
-
               </Routes>
             </main>
 
             <Footer />
           </div>
-
         </CartProvider>
       </AuthProvider>
     </BrowserRouter>

@@ -109,20 +109,22 @@
   margin-bottom: 20px;
 }
 
-.cart-notification {
+/* Cart Notification */
+.cart-notification-home {
   position: fixed;
-  bottom: 20px;
+  top: 100px;
   right: 20px;
-  background: #38a169;
-  color: white;
-  padding: 12px 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+  padding: 16px;
   z-index: 1000;
-  animation: slideIn 0.3s ease;
+  border-left: 4px solid #EF7722;
+  animation: slideInRight 0.3s ease;
+  max-width: 320px;
 }
 
-@keyframes slideIn {
+@keyframes slideInRight {
   from {
     transform: translateX(100%);
     opacity: 0;
@@ -131,6 +133,55 @@
     transform: translateX(0);
     opacity: 1;
   }
+}
+
+.notification-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.notification-icon {
+  background: #EF7722;
+  color: white;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 0.8rem;
+}
+
+.notification-text {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.notification-text strong {
+  color: #2c3e50;
+  font-size: 0.9rem;
+}
+
+.notification-text span {
+  color: #666;
+  font-size: 0.8rem;
+}
+
+.notification-action {
+  color: #EF7722;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.8rem;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+}
+
+.notification-action:hover {
+  background: #f8f9fa;
 }
 
 /* Responsive Design */

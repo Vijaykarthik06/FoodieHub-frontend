@@ -281,6 +281,7 @@ const GeneralMenu = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedRestaurant, setSelectedRestaurant] = useState('all');
   const [cartNotification, setCartNotification] = useState(null);
+  
 
   // Get unique categories
   const categories = ['all', ...new Set(allMenuItems.map(item => item.category))];
@@ -302,7 +303,7 @@ const GeneralMenu = () => {
     setCartNotification(product.name);
     setTimeout(() => setCartNotification(null), 3000);
   };
-
+  
   return (
     <div className="general-menu-page">
       <div className="container">
@@ -382,10 +383,19 @@ const GeneralMenu = () => {
 
         {/* Cart Notification */}
         {cartNotification && (
-          <div className="cart-notification">
-            <span>✓ Added {cartNotification} to cart</span>
+        <div className="cart-notification-home">
+          <div className="notification-content">
+            <span className="notification-icon">✓</span>
+            <div className="notification-text">
+              <strong>Added to cart!</strong>
+              <span>{cartNotification.quantity}x {cartNotification.productName}</span>
+            </div>
+            <Link to="/cart" className="notification-action">
+              View Cart
+            </Link>
           </div>
-        )}
+        </div>
+      )}
       </div>
     </div>
   );

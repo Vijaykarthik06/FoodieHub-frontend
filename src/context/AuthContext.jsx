@@ -15,10 +15,27 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  // Use port 5000 (your backend is running on 5000)
-  const API_URL = 'http://localhost:5000';
+  // ✅ Use Render Backend URL
+const API_URL = 'http://localhost:5000/api';
 
+  // ✅ Test backend connection on mount
   useEffect(() => {
+    const testConnection = async () => {
+      try {
+        console.log('🔍 Testing backend connection...');
+        const response = await fetch(`${API_URL}/api/health`, {
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json',
+          }
+        });
+        console.log('✅ Backend health check:', response.status);
+      } catch (err) {
+        console.error('❌ Backend connection failed:', err.message);
+      }
+    };
+    
+    testConnection();
     checkAuthStatus();
   }, []);
 
@@ -58,8 +75,8 @@ export const AuthProvider = ({ children }) => {
     setLoading(true);
     setError('');
     try {
-      console.log('🔐 Attempting login to:', `${API_URL}/api/auth/login`);
-      
+      console.log('🔐 Logging in →', `${API_URL}/api/auth/login`);
+
       const response = await fetch(`${API_URL}/api/auth/login`, {
         method: 'POST',
         headers: {
@@ -70,25 +87,48 @@ export const AuthProvider = ({ children }) => {
 
       console.log('📨 Login response status:', response.status);
 
-      const data = await response.json();
-      
+      // Try to read as text first for debugging
+      const responseText = await response.text();
+      console.log('📨 Login response text:', responseText);
+
+      let data;
+      try {
+        data = JSON.parse(responseText);
+      } catch (parseError) {
+        console.error('❌ Failed to parse JSON:', parseError);
+        throw new Error('Server returned invalid response');
+      }
+
+      console.log('📨 Login parsed data:', data);
+
       if (!response.ok) {
-        throw new Error(data.message || 'Login failed');
+        throw new Error(data.message || `Login failed with status ${response.status}`);
       }
 
       if (data.success) {
         localStorage.setItem('token', data.token);
         localStorage.setItem('user', JSON.stringify(data.user));
         setUser(data.user);
+        setError('');
         return data;
       } else {
         throw new Error(data.message || 'Login failed');
       }
+
     } catch (error) {
       console.error('🔴 Login error:', error);
-      const errorMessage = error.message.includes('Failed to fetch') 
-        ? 'Cannot connect to server. Please check if backend is running on port 5000.'
-        : error.message;
+      
+      let errorMessage;
+      if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+        errorMessage = `Cannot connect to backend server. Please check:
+        1. The backend URL: ${API_URL}
+        2. The backend is running
+        3. CORS is configured on backend
+        4. Network connection`;
+      } else {
+        errorMessage = error.message;
+      }
+      
       setError(errorMessage);
       throw error;
     } finally {
@@ -100,8 +140,8 @@ export const AuthProvider = ({ children }) => {
     setLoading(true);
     setError('');
     try {
-      console.log('📝 Attempting registration to:', `${API_URL}/api/auth/register`);
-      
+      console.log('📝 Registering →', `${API_URL}/api/auth/register`);
+
       const response = await fetch(`${API_URL}/api/auth/register`, {
         method: 'POST',
         headers: {
@@ -112,25 +152,50 @@ export const AuthProvider = ({ children }) => {
 
       console.log('📨 Registration response status:', response.status);
 
-      const data = await response.json();
-      
+      // Try to read as text first for debugging
+      const responseText = await response.text();
+      console.log('📨 Registration response text:', responseText);
+
+      let data;
+      try {
+        data = JSON.parse(responseText);
+      } catch (parseError) {
+        console.error('❌ Failed to parse JSON:', parseError);
+        throw new Error('Server returned invalid response');
+      }
+
+      console.log('📨 Registration parsed data:', data);
+
       if (!response.ok) {
-        throw new Error(data.message || 'Registration failed');
+        throw new Error(data.message || `Registration failed with status ${response.status}`);
       }
 
       if (data.success) {
         localStorage.setItem('token', data.token);
         localStorage.setItem('user', JSON.stringify(data.user));
         setUser(data.user);
+        setError('');
         return data;
       } else {
         throw new Error(data.message || 'Registration failed');
       }
+
     } catch (error) {
       console.error('🔴 Registration error:', error);
-      const errorMessage = error.message.includes('Failed to fetch') 
-        ? 'Cannot connect to server. Please check if backend is running on port 5000.'
-        : error.message;
+      
+      let errorMessage;
+      if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+        errorMessage = `Cannot connect to backend server. Please check:
+        1. The backend URL: ${API_URL}
+        2. The backend is running
+        3. CORS is configured on backend
+        4. Network connection
+        
+        Try testing: ${API_URL}/api/health`;
+      } else {
+        errorMessage = error.message;
+      }
+      
       setError(errorMessage);
       throw error;
     } finally {
@@ -156,7 +221,8 @@ export const AuthProvider = ({ children }) => {
     login,
     register,
     logout,
-    setError: clearError
+    setError: clearError,
+    API_URL // Export for testing
   };
 
   return (

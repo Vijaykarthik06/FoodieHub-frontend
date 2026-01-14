@@ -156,12 +156,12 @@ const Home = () => {
           <h1 className="hero-title">Delicious food <br /> delivered to <br /> your door</h1> 
           <p className="hero-subtitle">Order from your favorite local restaurants with just a few clicks</p>
           <div className="hero-actions">
-            <Link to="/restaurants" className="btn btn-primary hero-cta">
-              Order Now
-            </Link>
-            {/* <Link to="/restaurants" className="btn btn-outline hero-cta">
+            <Link to="/menu" className="btn btn-primary hero-cta">
               View Menu
-            </Link> */}
+            </Link>
+             <Link to="/restaurants" className="btn btn-primary hero-cta">
+              View Restaurants
+            </Link> 
           </div>
         </div>
       </section>
