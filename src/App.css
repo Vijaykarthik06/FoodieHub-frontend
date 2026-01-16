@@ -158,3 +158,342 @@ body {
     font-size: 24px;
   }
 }
+
+/* Auth Pages */
+.auth-container {
+  min-height: calc(100vh - 200px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+.auth-card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  padding: 2.5rem;
+  width: 100%;
+  max-width: 450px;
+  animation: slideUp 0.5s ease;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.auth-card h2 {
+  color: #333;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+/* Form Styles */
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #555;
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 2px solid #e1e5e9;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background: #f8f9fa;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #ff6b35;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+}
+
+.form-group input::placeholder {
+  color: #999;
+}
+
+/* Button Styles */
+.btn {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #ff6b35 0%, #ff8e53 100%);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #ff8e53 0%, #ff6b35 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(255, 107, 53, 0.3);
+}
+
+.btn-primary:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.btn-block {
+  width: 100%;
+  display: block;
+}
+
+/* Alert Messages */
+.alert {
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+}
+
+.alert-error {
+  background: #fee;
+  color: #c33;
+  border: 1px solid #fcc;
+}
+
+.alert-success {
+  background: #efffef;
+  color: #2a7;
+  border: 1px solid #cfc;
+}
+
+/* Auth Links */
+.auth-links {
+  margin-top: 1.5rem;
+  text-align: center;
+  padding-top: 1.5rem;
+  border-top: 1px solid #eee;
+}
+
+.auth-links p {
+  margin: 0.75rem 0;
+  color: #666;
+}
+
+.auth-links a {
+  color: #ff6b35;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.auth-links a:hover {
+  color: #ff8e53;
+  text-decoration: underline;
+}
+
+/* Password Strength Indicator */
+.password-strength {
+  margin-top: 0.5rem;
+  height: 4px;
+  background: #eee;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.password-strength-bar {
+  height: 100%;
+  transition: width 0.3s ease, background 0.3s ease;
+}
+
+.password-strength.weak .password-strength-bar {
+  background: #ff4757;
+  width: 33%;
+}
+
+.password-strength.medium .password-strength-bar {
+  background: #ffa502;
+  width: 66%;
+}
+
+.password-strength.strong .password-strength-bar {
+  background: #2ed573;
+  width: 100%;
+}
+
+/* Form Validation */
+.form-group.error input {
+  border-color: #ff4757;
+  background: #fff5f5;
+}
+
+.form-group.success input {
+  border-color: #2ed573;
+  background: #f0fff4;
+}
+
+.error-message {
+  color: #ff4757;
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.success-message {
+  color: #2ed573;
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Loading State */
+.loading-spinner {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 1s linear infinite;
+  margin-right: 0.5rem;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .auth-container {
+    padding: 1rem;
+  }
+  
+  .auth-card {
+    padding: 1.5rem;
+    max-width: 100%;
+  }
+  
+  .auth-card h2 {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .auth-card {
+    padding: 1.25rem;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  .form-group input {
+    padding: 0.65rem 0.9rem;
+  }
+  
+  .btn {
+    padding: 0.65rem 1.25rem;
+  }
+}
+
+/* Admin Loading */
+.admin-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: #f5f7fa;
+}
+
+.spinner-large {
+  width: 50px;
+  height: 50px;
+  border: 4px solid #e5e7eb;
+  border-top-color: #4f46e5;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 20px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Admin Link in Navbar */
+.admin-link {
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  color: white !important;
+  border-radius: 8px;
+  padding: 8px 16px !important;
+  margin-left: 10px;
+}
+
+.admin-link:hover {
+  background: linear-gradient(135deg, #4338ca 0%, #6d28d9 100%);
+  transform: translateY(-2px);
+}
+
+.admin-link .nav-icon {
+  margin-right: 8px;
+}
+
+/* 404 Page Links */
+.page-not-found-links {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.page-not-found-links .btn {
+  padding: 12px 24px;
+  font-size: 1rem;
+}
+
+/* Admin Page Placeholder */
+.admin-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #f5f7fa;
+  padding: 40px;
+}
+
+.admin-page h1 {
+  color: #111827;
+  margin-bottom: 20px;
+  font-size: 2.5rem;
+}
+
+.admin-page p {
+  color: #6b7280;
+  font-size: 1.2rem;
+}

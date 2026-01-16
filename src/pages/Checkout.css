@@ -596,3 +596,131 @@ textarea.form-input {
     border: 1px solid #ddd;
   }
 }
+
+/* Email Notice */
+.email-notice {
+  background: #e3f2fd;
+  border-left: 4px solid #2196f3;
+  padding: 12px 15px;
+  margin-bottom: 20px;
+  border-radius: 4px;
+}
+
+.email-notice p {
+  margin: 0;
+  color: #0d47a1;
+  font-size: 0.95rem;
+}
+
+/* Email Info */
+.email-info {
+  margin-top: 15px;
+  padding: 10px;
+  background: #f8f9fa;
+  border-radius: 5px;
+  border-left: 3px solid #28a745;
+}
+
+.email-info small {
+  color: #495057;
+}
+
+/* Email Summary */
+.email-summary {
+  margin-top: 20px;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+}
+
+.email-summary h4 {
+  color: #495057;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.email-summary ul {
+  margin: 10px 0;
+  padding-left: 20px;
+}
+
+.email-summary li {
+  margin-bottom: 5px;
+  color: #6c757d;
+}
+
+/* Loading Spinner */
+.loading-spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 1s linear infinite;
+  margin-right: 8px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Database Notice */
+.database-notice {
+  background: #e8f5e9;
+  border-left: 4px solid #4caf50;
+  padding: 12px 15px;
+  margin-bottom: 20px;
+  border-radius: 4px;
+}
+
+.database-notice p {
+  margin: 0;
+  color: #2e7d32;
+  font-size: 0.95rem;
+}
+
+/* Database Info */
+.database-info {
+  margin-top: 15px;
+  padding: 10px;
+  background: #f8f9fa;
+  border-radius: 5px;
+  border-left: 3px solid #4caf50;
+}
+
+.database-info small {
+  color: #495057;
+}
+
+/* Database Summary */
+.database-summary {
+  margin-top: 20px;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+}
+
+.database-summary h4 {
+  color: #495057;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.database-summary ul {
+  margin: 10px 0;
+  padding-left: 20px;
+}
+
+.database-summary li {
+  margin-bottom: 5px;
+  color: #6c757d;
+}

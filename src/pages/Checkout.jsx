@@ -3,13 +3,10 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { ordersAPI } from '../services/api';
-import { orderUtils } from './Orders';
 import './Checkout.css';
 
 const Checkout = () => {
-  const { cartItems, getCartTotal, clearCart, restaurant, dispatch } = useCart();
-  
-
+  const { cartItems, getCartTotal, clearCart, restaurant } = useCart();
   const { user } = useAuth();
   const navigate = useNavigate();
   
@@ -42,37 +39,6 @@ const Checkout = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  // Helper function to safely handle cuisine data
-  const getCuisineDisplay = (cuisine) => {
-    if (!cuisine) return 'Various';
-    if (Array.isArray(cuisine)) {
-      return cuisine.join(', ');
-    }
-    if (typeof cuisine === 'string') {
-      return cuisine;
-    }
-    return 'Various';
-  };
-
-  // Helper function to safely handle restaurant data
-  const getRestaurantData = () => {
-    if (!restaurant) {
-      return {
-        _id: 'default_restaurant',
-        name: 'Restaurant',
-        cuisine: 'Various',
-        image: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=1170&auto=format&fit=crop'
-      };
-    }
-    
-    return {
-      _id: restaurant._id || restaurant.id || 'default_restaurant',
-      name: restaurant.name || 'Restaurant',
-      cuisine: restaurant.cuisine || 'Various',
-      image: restaurant.image || 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=1170&auto=format&fit=crop'
-    };
-  };
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -80,242 +46,175 @@ const Checkout = () => {
       [name]: value
     });
   };
-  // In your Checkout component after successful order creation
-const handleCheckoutSubmit = async (checkoutData) => {
-  try {
-    // Create order data
-    const orderData = {
-      restaurantId: restaurant._id,
-      restaurantName: restaurant.name,
-      restaurantImage: restaurant.image,
-      items: cartItems.map(item => ({
-        productId: item.id,
-        name: item.name,
-        price: item.price,
-        quantity: item.quantity,
-        image: item.image,
-        specialInstructions: item.specialInstructions || ''
-      })),
-      deliveryAddress: {
-        street: checkoutData.address,
-        city: checkoutData.city,
-        state: checkoutData.state,
-        zipCode: checkoutData.zipCode,
-        instructions: checkoutData.deliveryInstructions || ''
-      },
-      contactInfo: {
-        firstName: checkoutData.firstName,
-        lastName: checkoutData.lastName,
-        phone: checkoutData.phone,
-        email: checkoutData.email || user.email
-      },
-      paymentMethod: checkoutData.paymentMethod,
-      deliveryType: checkoutData.deliveryType || 'delivery',
-      tip: parseFloat(checkoutData.tip) || 0,
-      specialInstructions: checkoutData.specialInstructions || ''
-    };
-
-    // Save to MongoDB
-    const response = await ordersAPI.create(orderData);
-    
-    if (response.data.success) {      
-      // Dispatch event to update Orders page
-      window.dispatchEvent(new CustomEvent('newOrder', {
-        detail: { 
-          type: 'NEW_ORDER', 
-          order: response.data.order 
-        }
-      }));
-      
-      // Navigate to success page
-      navigate('/order-success', { 
-        state: { orderDetails: response.data.order },
-        replace: true 
-      });
-    }
-    
-  } catch (error) {
-    console.error('Checkout error:', error);
-    setError(error.response?.data?.message || 'Failed to place order. Please try again.');
-  }
-};
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  setLoading(true);
-  setError('');
+    e.preventDefault();
+    setLoading(true);
+    setError('');
 
-  console.log('🟡 Starting order submission...');
-  console.log('🟡 Cart items:', cartItems);
-  console.log('🟡 Form data:', formData);
-  console.log('🟡 User:', user);
+    console.log('🟡 Starting order submission...');
+    console.log('🟡 Cart items:', cartItems);
+    console.log('🟡 Form data:', formData);
+    console.log('🟡 User:', user);
 
-  // Validate required fields
-  if (!validateForm()) {
-    console.log('🔴 Form validation failed');
-    setLoading(false);
-    return;
-  }
-
-  if (cartItems.length === 0) {
-    console.log('🔴 Cart is empty');
-    setError('Cart is empty');
-    setLoading(false);
-    return;
-  }
-
-  try {
-    // Get safe restaurant data
-    const restaurantData = getRestaurantData();
-    console.log('🟡 Restaurant data:', restaurantData);
-    
-    // Calculate order totals
-    const subtotal = getCartTotal();
-    const deliveryFee = formData.deliveryType === 'delivery' ? 2.99 : 0;
-    const tax = subtotal * 0.08;
-    const tipAmount = parseFloat(formData.tip) || 0;
-    const total = subtotal + deliveryFee + tax + tipAmount;
-
-    console.log('🟡 Order totals:', { subtotal, deliveryFee, tax, tipAmount, total });
-
-    // Prepare order data for backend
-    const orderData = {
-      restaurantId: restaurantData._id,
-      restaurantName: restaurantData.name,
-      restaurantImage: restaurantData.image,
-      items: cartItems.map(item => ({
-        name: item.name,
-        price: item.price,
-        quantity: item.quantity,
-        image: item.image,
-        specialInstructions: item.specialInstructions || ''
-      })),
-      deliveryAddress: {
-        street: formData.street,
-        city: formData.city,
-        state: formData.state,
-        zipCode: formData.zipCode,
-        instructions: formData.instructions
-      },
-      contactInfo: {
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        email: formData.email,
-        phone: formData.phone
-      },
-      paymentMethod: formData.paymentMethod,
-      deliveryType: formData.deliveryType,
-      tip: tipAmount,
-      specialInstructions: formData.specialInstructions,
-      subtotal: subtotal,
-      deliveryFee: deliveryFee,
-      tax: tax,
-      total: total
-    };
-
-    console.log('📦 Final order data being sent to backend:', JSON.stringify(orderData, null, 2));
-
-    // Try to send order to backend
-    console.log('🟡 Calling ordersAPI.create...');
-    let response;
-    try {
-      response = await ordersAPI.create(orderData);
-      console.log('✅ Backend response:', response.data);
-    } catch (apiError) {
-      console.error('🔴 API call failed:', apiError);
-      console.error('🔴 API error details:', {
-        message: apiError.message,
-        response: apiError.response?.data,
-        status: apiError.response?.status
-      });
-      
-      // Fallback to localStorage if API fails
-      console.log('🟡 Using localStorage fallback...');
-      response = {
-        data: {
-          success: true,
-          order: {
-            _id: `order_₹{Date.now()}`,
-            orderNumber: `#${Math.floor(100000 + Math.random() * 900000)}`,
-            ...orderData,
-            createdAt: new Date().toISOString(),
-            estimatedDelivery: new Date(Date.now() + 45 * 60 * 1000).toISOString(),
-            status: 'confirmed'
-          }
-        }
-      };
+    // Validate required fields
+    if (!validateForm()) {
+      console.log('🔴 Form validation failed');
+      setLoading(false);
+      return;
     }
-    
-    if (response.data.success) {
-      console.log('✅ Order created successfully in backend');
+
+    if (cartItems.length === 0) {
+      console.log('🔴 Cart is empty');
+      setError('Cart is empty');
+      setLoading(false);
+      return;
+    }
+
+    try {
+      // Get safe restaurant data
+      const restaurantData = getRestaurantData();
+      console.log('🟡 Restaurant data:', restaurantData);
       
-      // Create order for localStorage history
-      const newOrder = {
-        _id: response.data.order._id,
-        orderNumber: response.data.order.orderNumber,
-        userEmail: user.email,
-        contactInfo: {
-          name: `${formData.firstName} ${formData.lastName}`,
-          email: formData.email,
-          phone: formData.phone
-        },
-        restaurant: {
-          _id: restaurantData._id,
-          name: restaurantData.name,
-          cuisine: restaurantData.cuisine,
-          image: restaurantData.image
-        },
+      // Calculate order totals
+      const subtotal = getCartTotal();
+      const deliveryFee = formData.deliveryType === 'delivery' ? 2.99 : 0;
+      const tax = subtotal * 0.08;
+      const tipAmount = parseFloat(formData.tip) || 0;
+      const total = subtotal + deliveryFee + tax + tipAmount;
+
+      console.log('🟡 Order totals:', { subtotal, deliveryFee, tax, tipAmount, total });
+
+      // Prepare order data for backend - FIXED STRUCTURE
+      const orderData = {
+        userEmail: user?.email, // CRITICAL: Must include userEmail
+        restaurantId: restaurantData._id,
+        restaurantName: restaurantData.name,
+        restaurantImage: restaurantData.image,
         items: cartItems.map(item => ({
-          _id: item._id || item.id,
-          name: item.name,
-          price: item.price,
-          quantity: item.quantity,
-          image: item.image,
+          name: item.name || 'Unknown Item',
+          price: parseFloat(item.price) || 0,
+          quantity: parseInt(item.quantity) || 1,
+          image: item.image || '',
           specialInstructions: item.specialInstructions || ''
         })),
         deliveryAddress: {
-          street: formData.street,
-          city: formData.city,
-          state: formData.state,
-          zipCode: formData.zipCode,
-          instructions: formData.instructions
+          street: formData.street || '',
+          city: formData.city || '',
+          state: formData.state || '',
+          zipCode: formData.zipCode || '',
+          instructions: formData.instructions || ''
         },
-        status: 'confirmed',
-        paymentMethod: formData.paymentMethod,
-        subtotal: subtotal,
-        deliveryFee: deliveryFee,
-        tax: tax,
-        tip: tipAmount,
-        total: total,
-        createdAt: new Date().toISOString(),
-        estimatedDelivery: new Date(Date.now() + 45 * 60 * 1000).toISOString()
+        contactInfo: {
+          firstName: formData.firstName || '',
+          lastName: formData.lastName || '',
+          email: formData.email || '',
+          phone: formData.phone || ''
+        },
+        paymentMethod: formData.paymentMethod || 'credit_card',
+        deliveryType: formData.deliveryType || 'delivery',
+        subtotal: parseFloat(subtotal) || 0,
+        deliveryFee: parseFloat(deliveryFee) || 0,
+        tax: parseFloat(tax) || 0,
+        tip: parseFloat(tipAmount) || 0,
+        total: parseFloat(total) || 0,
+        specialInstructions: formData.specialInstructions || ''
       };
 
-      console.log('🟡 Adding order to localStorage...', newOrder);
+      console.log('📦 Final order data being sent to backend:', JSON.stringify(orderData, null, 2));
 
-      // Add to localStorage order history
-      orderUtils.addNewOrder(user.email, newOrder);
+      // Send order to backend
+      console.log('🟡 Sending order to server...');
+      
+      try {
+        // Using fetch directly for better debugging
+        const response = await fetch('http://localhost:5000/api/orders/create', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token') || ''}`
+          },
+          body: JSON.stringify(orderData)
+        });
 
-      // Clear cart
-      clearCart();
-      
-      console.log('✅ Order process completed, navigating to success page');
-      
-      // Redirect to success page
-      navigate('/order-success', { 
-        state: { orderDetails: newOrder }
-      });
-    } else {
-      throw new Error(response.data.message || 'Failed to create order');
+        console.log('🟡 Response status:', response.status);
+        
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error('🔴 Server error response:', errorText);
+          throw new Error(`Server error: ${response.status}`);
+        }
+
+        const responseData = await response.json();
+        console.log('✅ Backend response:', responseData);
+
+        if (responseData.success) {
+          console.log('✅ Order created successfully in backend');
+          
+          // Clear cart
+          clearCart();
+          
+          console.log('✅ Order process completed, navigating to success page');
+          
+          // Redirect to success page
+          navigate('/order-success', { 
+            state: { 
+              orderDetails: responseData.order,
+              message: 'Order placed successfully!' 
+            },
+            replace: true
+          });
+        } else {
+          throw new Error(responseData.message || 'Failed to create order');
+        }
+
+      } catch (apiError) {
+        console.error('🔴 API call failed:', apiError);
+        
+        // Fallback: Save to localStorage and show success page
+        console.log('🟡 Using localStorage fallback...');
+        
+        const mockOrder = {
+          _id: `order_${Date.now()}`,
+          orderNumber: `ORD${Date.now()}`,
+          ...orderData,
+          status: 'confirmed',
+          createdAt: new Date().toISOString(),
+          estimatedDelivery: new Date(Date.now() + 45 * 60 * 1000).toISOString()
+        };
+        
+        // Save to localStorage
+        if (user?.email) {
+          try {
+            const orders = JSON.parse(localStorage.getItem(`userOrders_${user.email}`) || '[]');
+            orders.unshift(mockOrder);
+            localStorage.setItem(`userOrders_${user.email}`, JSON.stringify(orders));
+            console.log('✅ Order saved to localStorage');
+          } catch (storageError) {
+            console.error('❌ Failed to save to localStorage:', storageError);
+          }
+        }
+        
+        // Clear cart
+        clearCart();
+        
+        // Navigate to success page
+        navigate('/order-success', { 
+          state: { 
+            orderDetails: mockOrder,
+            message: 'Order placed (offline mode)!' 
+          },
+          replace: true
+        });
+      }
+
+    } catch (error) {
+      console.error('❌ Final order creation error:', error);
+      setError(error.response?.message || error.message || 'Failed to place order. Please try again.');
+    } finally {
+      setLoading(false);
     }
-
-  } catch (error) {
-    console.error('❌ Final order creation error:', error);
-    setError(error.response?.data?.message || error.message || 'Failed to place order. Please try again.');
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
   const validateForm = () => {
     const requiredFields = [
@@ -325,7 +224,7 @@ const handleCheckoutSubmit = async (checkoutData) => {
 
     for (let field of requiredFields) {
       if (!formData[field]?.trim()) {
-        const fieldName = field.replace(/([A-Z])/g, ' ₹1').toLowerCase();
+        const fieldName = field.replace(/([A-Z])/g, ' $1').toLowerCase();
         setError(`Please fill in the ${fieldName}`);
         return false;
       }
@@ -366,6 +265,25 @@ const handleCheckoutSubmit = async (checkoutData) => {
     }
 
     return true;
+  };
+
+  // Helper function to safely handle restaurant data
+  const getRestaurantData = () => {
+    if (!restaurant) {
+      return {
+        _id: 'default_restaurant',
+        name: 'Restaurant',
+        cuisine: 'Various',
+        image: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=1170&auto=format&fit=crop'
+      };
+    }
+    
+    return {
+      _id: restaurant._id || restaurant.id || 'default_restaurant',
+      name: restaurant.name || 'Restaurant',
+      cuisine: restaurant.cuisine || 'Various',
+      image: restaurant.image || 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=1170&auto=format&fit=crop'
+    };
   };
 
   const subtotal = getCartTotal();
@@ -474,7 +392,7 @@ const handleCheckoutSubmit = async (checkoutData) => {
                       value={formData.phone}
                       onChange={handleChange}
                       className="form-input"
-                      placeholder="+1 (555) 123-4567"
+                      placeholder="+91 9876543210"
                       required
                     />
                   </div>
@@ -508,7 +426,7 @@ const handleCheckoutSubmit = async (checkoutData) => {
                       value={formData.city}
                       onChange={handleChange}
                       className="form-input"
-                      placeholder="New York"
+                      placeholder="Mumbai"
                       required
                     />
                   </div>
@@ -521,7 +439,7 @@ const handleCheckoutSubmit = async (checkoutData) => {
                       value={formData.state}
                       onChange={handleChange}
                       className="form-input"
-                      placeholder="NY"
+                      placeholder="Maharashtra"
                       required
                     />
                   </div>
@@ -534,7 +452,7 @@ const handleCheckoutSubmit = async (checkoutData) => {
                       value={formData.zipCode}
                       onChange={handleChange}
                       className="form-input"
-                      placeholder="10001"
+                      placeholder="400001"
                       required
                     />
                   </div>
@@ -725,7 +643,7 @@ const handleCheckoutSubmit = async (checkoutData) => {
               />
               <div className="restaurant-details">
                 <h3>{restaurantData.name}</h3>
-                <p>{getCuisineDisplay(restaurantData.cuisine)}</p>
+                <p>{restaurantData.cuisine || 'Various'}</p>
               </div>
             </div>
             

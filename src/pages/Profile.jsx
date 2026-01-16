@@ -323,27 +323,6 @@ const Profile = () => {
                   Special offers
                 </label>
               </div>
-              <div className="preference-item">
-                <label className="preference-label">
-                  <input 
-                    type="checkbox" 
-                    onChange={(e) => {
-                      const prefsKey = `userPrefs_${user?.email}`;
-                      const prefs = JSON.parse(localStorage.getItem(prefsKey) || '{}');
-                      prefs.newsletter = e.target.checked;
-                      localStorage.setItem(prefsKey, JSON.stringify(prefs));
-                      
-                      // Show notification for preference change
-                      setMessage(`Newsletter ${e.target.checked ? 'subscribed' : 'unsubscribed'}`);
-                      setShowNotification(true);
-                      scrollToTop();
-                      setTimeout(() => setShowNotification(false), 2000);
-                    }}
-                  />
-                  <span className="checkmark"></span>
-                  Newsletter
-                </label>
-              </div>
             </div>
           </div>
         </div>

@@ -43,6 +43,7 @@ const Navbar = () => {
           <NavLink to="/restaurants" className="nav-link" onClick={() => setIsMenuOpen(false)}>
             Restaurants
           </NavLink>
+          
 
           {user ? (
             <>

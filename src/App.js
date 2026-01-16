@@ -20,6 +20,13 @@ import ProtectedRoute from './components/ProtectedRoute';
 import OrderSuccess from './pages/OrderSuccess';
 import ScrollToTop from './components/ScrollToTop';
 import './App.css';
+import axios from 'axios';
+import DebugDatabase from './components/DebugDatabase';
+import DebugCheckout from './components/DebugCheckout';
+import TestEmail from './components/TestEmail';
+
+
+
 
 function App() {
   return (
@@ -43,6 +50,10 @@ function App() {
                 <Route path="/product/:id" element={<ProductDetail />} />
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/order-success" element={<OrderSuccess />} />
+                <Route path="/debug-checkout" element={<DebugCheckout />} />
+                <Route path="/debug-db" element={<DebugDatabase />} />
+                <Route path="/test-email" element={<TestEmail />} />
+
 
                 <Route
                   path="/checkout"

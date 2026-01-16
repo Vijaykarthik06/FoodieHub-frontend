@@ -1,77 +1,110 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import './Auth.css';
 
 const Login = () => {
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   });
-  const { login, loading, error, setError } = useAuth();
+  const [loading, setLoading] = useState(false);
+  const [localError, setLocalError] = useState(''); // Use local state for errors
+  
+  const { login, error: authError, clearError } = useAuth();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-    // Clear error when user starts typing
-    if (error) setError('');
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+    // Clear errors when user starts typing
+    if (localError) setLocalError('');
+    if (authError) clearError();
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     
+    if (!formData.email || !formData.password) {
+      setLocalError('Please fill in all fields');
+      return;
+    }
+
+    setLoading(true);
+    setLocalError('');
+    clearError();
+
     try {
-      await login(formData.email, formData.password);
-      navigate('/');
-    } catch (err) {
-      // Error is already set in the context
-      console.error('Login error:', err);
+      const result = await login(formData.email, formData.password);
+      
+      if (result.success) {
+        navigate('/');
+      } else {
+        setLocalError(result.error || 'Login failed');
+      }
+    } catch (error) {
+      setLocalError(error.message || 'Login failed');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="auth-container">
       <div className="auth-card">
-        <h2 className="auth-title">Login to FoodieHub</h2>
-        {error && <div className="alert alert-error">{error}</div>}
-        <form onSubmit={handleSubmit} className="auth-form">
+        <h2>Login to FoodieHub</h2>
+        
+        {(localError || authError) && (
+          <div className="alert alert-error">
+            {localError || authError}
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label htmlFor="email" className="form-label">Email</label>
+            <label htmlFor="email">Email</label>
             <input
               type="email"
               id="email"
               name="email"
               value={formData.email}
               onChange={handleChange}
-              className="form-input"
+              placeholder="Enter your email"
               required
             />
           </div>
+
           <div className="form-group">
-            <label htmlFor="password" className="form-label">Password</label>
+            <label htmlFor="password">Password</label>
             <input
               type="password"
               id="password"
               name="password"
               value={formData.password}
               onChange={handleChange}
-              className="form-input"
+              placeholder="Enter your password"
               required
             />
           </div>
+
           <button 
             type="submit" 
-            className="btn btn-primary auth-btn"
+            className="btn btn-primary btn-block"
             disabled={loading}
           >
             {loading ? 'Logging in...' : 'Login'}
           </button>
         </form>
-        <div className="auth-footer">
-          <p>Don't have an account? <Link to="/register" className="auth-link">Register here</Link></p>
+
+        <div className="auth-links">
+          <p>
+            Don't have an account? <Link to="/register">Register here</Link>
+          </p>
+          <p>
+            <Link to="/forgot-password">Forgot password?</Link>
+          </p>
         </div>
       </div>
     </div>
