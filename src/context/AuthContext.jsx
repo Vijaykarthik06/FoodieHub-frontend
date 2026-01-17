@@ -6,7 +6,7 @@ import axios from 'axios';
 // Choose ONE of these options:
 
 // OPTION 1: For local development (if backend runs on port 5000)
-const API_URL = 'http://localhost:5000/api';
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
 // OPTION 2: For Render deployment
 // const API_URL = 'https://foodiehub-backend-7ohz.onrender.com/api';
