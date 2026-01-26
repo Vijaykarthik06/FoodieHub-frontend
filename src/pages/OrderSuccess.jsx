@@ -66,7 +66,9 @@ const OrderSuccess = () => {
   const formatEstimatedDelivery = () => {
     if (estimatedDelivery) {
       if (typeof estimatedDelivery === 'string') {
-        return estimatedDelivery;
+        // Parse string date
+        const date = new Date(estimatedDelivery);
+        return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
       } else if (estimatedDelivery instanceof Date) {
         return estimatedDelivery.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
       }
@@ -75,16 +77,43 @@ const OrderSuccess = () => {
     return new Date(Date.now() + 30 * 60000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   };
 
-  // Safely format contact name
+  // Safely format contact name - FIXED TEMPLATE LITERAL
   const getContactName = () => {
     if (contactInfo.firstName && contactInfo.lastName) {
-      return `₹{contactInfo.firstName} ₹{contactInfo.lastName}`;
+      return `${contactInfo.firstName} ${contactInfo.lastName}`;
     }
     if (contactInfo.name) {
       return contactInfo.name;
     }
     return 'Customer';
   };
+
+  // Safely get contact email
+  const getContactEmail = () => {
+    if (contactInfo.email) {
+      return contactInfo.email;
+    }
+    if (orderDetails.userEmail) {
+      return orderDetails.userEmail;
+    }
+    return 'your email';
+  };
+
+  // Safely format phone number
+  const formatPhoneNumber = (phone) => {
+    if (!phone) return '';
+    // Remove all non-digit characters
+    const cleaned = phone.replace(/\D/g, '');
+    // Format as +91 XXXXX XXXXX
+    if (cleaned.length === 10) {
+      return `+91 ${cleaned.slice(0, 5)} ${cleaned.slice(5)}`;
+    }
+    // Return as is if not standard length
+    return phone;
+  };
+
+  // Check if there are items in the order
+  const hasItems = items && items.length > 0;
 
   return (
     <div className="order-success-page">
@@ -94,7 +123,7 @@ const OrderSuccess = () => {
             <div className="success-icon">🎉</div>
             <h1 className="success-title">Order Confirmed!</h1>
             <p className="success-subtitle">
-              Thank you for your order. We've sent a confirmation to {contactInfo.email || 'your email'}
+              Thank you for your order. We've sent a confirmation to {getContactEmail()}
             </p>
           </div>
 
@@ -135,10 +164,15 @@ const OrderSuccess = () => {
               <div className="address-details">
                 <p><strong>{getContactName()}</strong></p>
                 {deliveryAddress.street && <p>{deliveryAddress.street}</p>}
-                {deliveryAddress.city && deliveryAddress.state && (
-                  <p>{deliveryAddress.city}, {deliveryAddress.state} {deliveryAddress.zipCode}</p>
+                {(deliveryAddress.city || deliveryAddress.state) && (
+                  <p>
+                    {deliveryAddress.city && `${deliveryAddress.city}`}
+                    {deliveryAddress.city && deliveryAddress.state && ', '}
+                    {deliveryAddress.state && `${deliveryAddress.state}`}
+                    {deliveryAddress.zipCode && ` ${deliveryAddress.zipCode}`}
+                  </p>
                 )}
-                {contactInfo.phone && <p>📱 {contactInfo.phone}</p>}
+                {contactInfo.phone && <p>📱 {formatPhoneNumber(contactInfo.phone)}</p>}
                 {contactInfo.email && <p>✉️ {contactInfo.email}</p>}
                 {deliveryAddress.instructions && (
                   <div className="instructions">
@@ -166,41 +200,43 @@ const OrderSuccess = () => {
                   )}
                   <div className="restaurant-text">
                     <h4>{restaurant.name}</h4>
-                    <p>{restaurant.cuisine || restaurant.tags?.join(', ') || 'Various Cuisines'}</p>
+                    {restaurant.cuisine && <p>{restaurant.cuisine}</p>}
                   </div>
                 </div>
               </div>
             )}
 
             {/* Order Items */}
-            <div className="order-items">
-              <h3>Order Items</h3>
-              <div className="items-list">
-                {items.map((item, index) => (
-                  <div key={`₹{item.id || item._id || index}-₹{index}`} className="order-item">
-                    <div className="item-image">
-                      <img 
-                        src={item.image} 
-                        alt={item.name}
-                        onError={(e) => {
-                          e.target.src = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=1160&auto=format&fit=crop';
-                        }}
-                      />
+            {hasItems && (
+              <div className="order-items">
+                <h3>Order Items</h3>
+                <div className="items-list">
+                  {items.map((item, index) => (
+                    <div key={`${item.id || item._id || index}-${index}`} className="order-item">
+                      <div className="item-image">
+                        <img 
+                          src={item.image || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=1160&auto=format&fit=crop'} 
+                          alt={item.name}
+                          onError={(e) => {
+                            e.target.src = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=1160&auto=format&fit=crop';
+                          }}
+                        />
+                      </div>
+                      <div className="item-details">
+                        <h4>{item.name || `Item ${index + 1}`}</h4>
+                        <p className="item-quantity">Quantity: {item.quantity || 1}</p>
+                        {item.specialInstructions && (
+                          <p className="item-instructions">
+                            <em>Note: {item.specialInstructions}</em>
+                          </p>
+                        )}
+                        <p className="item-price">₹{((item.price || 0) * (item.quantity || 1)).toFixed(2)}</p>
+                      </div>
                     </div>
-                    <div className="item-details">
-                      <h4>{item.name}</h4>
-                      <p className="item-quantity">Quantity: {item.quantity}</p>
-                      {item.specialInstructions && (
-                        <p className="item-instructions">
-                          <em>Note: {item.specialInstructions}</em>
-                        </p>
-                      )}
-                      <p className="item-price">₹{((item.price || 0) * (item.quantity || 1)).toFixed(2)}</p>
-                    </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Payment Summary */}
             <div className="payment-summary">
@@ -231,7 +267,10 @@ const OrderSuccess = () => {
                 <div className="summary-row">
                   <span>Payment Method:</span>
                   <span className="payment-method">
-                    {paymentMethod.replace(/_/g, ' ').toUpperCase()}
+                    {typeof paymentMethod === 'string' 
+                      ? paymentMethod.replace(/_/g, ' ').toUpperCase()
+                      : 'CASH ON DELIVERY'
+                    }
                   </span>
                 </div>
               </div>
@@ -243,7 +282,7 @@ const OrderSuccess = () => {
             <Link to="/restaurants" className="btn btn-outline">
               Order Again
             </Link>
-             <Link to="/orders" className="btn btn-outline">
+            <Link to="/orders" className="btn btn-outline">
               View Order History
             </Link>
             <button 
@@ -294,7 +333,7 @@ const OrderSuccess = () => {
             <h3>Need Help?</h3>
             <p>
               If you have any questions about your order, please contact our support team at{" "}
-              <a href="tel:+1-555-ORDER-NOW">+1 (555) ORDER-NOW</a> or{" "}
+              <a href="tel:+91-9876543210">+91 7667360699</a> or{" "}
               <a href="mailto:support@foodiehub.com">support@foodiehub.com</a>
             </p>
           </div>

@@ -1,0 +1,21 @@
+{
+   "buildCommand": "CI=false npm run build",
+  "devCommand": "npm run start",
+  "installCommand": "npm install --legacy-peer-deps",
+  "framework": "create-react-app",
+  "outputDirectory": "build",
+  "ignoreCommand": "git diff --quiet HEAD^ HEAD ./",
+  "github": {
+    "silent": true
+  },
+  "env": {
+    "REACT_APP_API_URL": "https://foodiehub-backend-7ohz.onrender.com/api"
+  },
+  "redirects": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://foodiehub-backend-7ohz.onrender.com/api/:path*",
+      "permanent": false
+    }
+  ]
+}   

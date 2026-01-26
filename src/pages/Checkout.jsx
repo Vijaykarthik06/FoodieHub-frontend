@@ -24,11 +24,8 @@ const Checkout = () => {
     zipCode: '',
     instructions: '',
     
-    // Payment
-    paymentMethod: 'credit_card',
-    cardNumber: '',
-    cardExpiry: '',
-    cardCvv: '',
+    // Payment - Only Cash on Delivery
+    paymentMethod: 'cash',
     
     // Order Details
     deliveryType: 'delivery',
@@ -85,9 +82,9 @@ const Checkout = () => {
 
       console.log('🟡 Order totals:', { subtotal, deliveryFee, tax, tipAmount, total });
 
-      // Prepare order data for backend - FIXED STRUCTURE
+      // Prepare order data for backend
       const orderData = {
-        userEmail: user?.email, // CRITICAL: Must include userEmail
+        userEmail: user?.email,
         restaurantId: restaurantData._id,
         restaurantName: restaurantData.name,
         restaurantImage: restaurantData.image,
@@ -111,14 +108,15 @@ const Checkout = () => {
           email: formData.email || '',
           phone: formData.phone || ''
         },
-        paymentMethod: formData.paymentMethod || 'credit_card',
+        paymentMethod: 'cash', // Always cash on delivery
         deliveryType: formData.deliveryType || 'delivery',
         subtotal: parseFloat(subtotal) || 0,
         deliveryFee: parseFloat(deliveryFee) || 0,
         tax: parseFloat(tax) || 0,
         tip: parseFloat(tipAmount) || 0,
         total: parseFloat(total) || 0,
-        specialInstructions: formData.specialInstructions || ''
+        specialInstructions: formData.specialInstructions || '',
+        paymentStatus: 'pending' // Payment will be collected on delivery
       };
 
       console.log('📦 Final order data being sent to backend:', JSON.stringify(orderData, null, 2));
@@ -127,7 +125,6 @@ const Checkout = () => {
       console.log('🟡 Sending order to server...');
       
       try {
-        // Using fetch directly for better debugging
         const response = await fetch('http://localhost:5000/api/orders/create', {
           method: 'POST',
           headers: {
@@ -160,7 +157,7 @@ const Checkout = () => {
           navigate('/order-success', { 
             state: { 
               orderDetails: responseData.order,
-              message: 'Order placed successfully!' 
+              message: 'Order placed successfully! Pay with cash on delivery.' 
             },
             replace: true
           });
@@ -179,8 +176,11 @@ const Checkout = () => {
           orderNumber: `ORD${Date.now()}`,
           ...orderData,
           status: 'confirmed',
+          paymentMethod: 'cash',
+          paymentStatus: 'pending',
           createdAt: new Date().toISOString(),
-          estimatedDelivery: new Date(Date.now() + 45 * 60 * 1000).toISOString()
+          estimatedDelivery: new Date(Date.now() + 45 * 60 * 1000).toISOString(),
+          cashAmount: total // Add cash amount for reference
         };
         
         // Save to localStorage
@@ -202,7 +202,7 @@ const Checkout = () => {
         navigate('/order-success', { 
           state: { 
             orderDetails: mockOrder,
-            message: 'Order placed (offline mode)!' 
+            message: 'Order placed (offline mode)! Pay ₹' + total.toFixed(2) + ' in cash on delivery.'
           },
           replace: true
         });
@@ -244,27 +244,7 @@ const Checkout = () => {
       return false;
     }
 
-    if (formData.paymentMethod.includes('card')) {
-      if (!formData.cardNumber?.trim() || !formData.cardExpiry?.trim() || !formData.cardCvv?.trim()) {
-        setError('Please fill in all card details');
-        return false;
-      }
-
-      // Basic card number validation
-      const cardNumber = formData.cardNumber.replace(/\s/g, '');
-      if (cardNumber.length < 13 || cardNumber.length > 19) {
-        setError('Please enter a valid card number');
-        return false;
-      }
-
-      // Basic CVV validation
-      if (formData.cardCvv.length < 3 || formData.cardCvv.length > 4) {
-        setError('Please enter a valid CVV');
-        return false;
-      }
-    }
-
-    return true;
+    return true; // No card validation needed for cash on delivery
   };
 
   // Helper function to safely handle restaurant data
@@ -392,7 +372,7 @@ const Checkout = () => {
                       value={formData.phone}
                       onChange={handleChange}
                       className="form-input"
-                      placeholder="+91 9876543210"
+                      placeholder="+91 "
                       required
                     />
                   </div>
@@ -426,7 +406,7 @@ const Checkout = () => {
                       value={formData.city}
                       onChange={handleChange}
                       className="form-input"
-                      placeholder="Mumbai"
+                      placeholder="Coimbatore"
                       required
                     />
                   </div>
@@ -439,7 +419,7 @@ const Checkout = () => {
                       value={formData.state}
                       onChange={handleChange}
                       className="form-input"
-                      placeholder="Maharashtra"
+                      placeholder="Tamil Nadu"
                       required
                     />
                   </div>
@@ -452,7 +432,7 @@ const Checkout = () => {
                       value={formData.zipCode}
                       onChange={handleChange}
                       className="form-input"
-                      placeholder="400001"
+                      placeholder="6*****"
                       required
                     />
                   </div>
@@ -505,7 +485,8 @@ const Checkout = () => {
 
               {/* Tip Selection */}
               <div className="form-section">
-                <h2 className="section-title">Add a Tip</h2>
+                <h2 className="section-title">Add a Tip (Optional)</h2>
+                <p className="tip-subtitle">You can add a tip for the delivery person in cash</p>
                 <div className="form-group">
                   <div className="tip-options">
                     {tipOptions.map(option => (
@@ -554,71 +535,22 @@ const Checkout = () => {
                 </div>
               </div>
               
-              {/* Payment Method */}
+              {/* Payment Method - Only Cash on Delivery */}
               <div className="form-section">
                 <h2 className="section-title">Payment Method</h2>
-                <div className="form-group">
-                  <label htmlFor="paymentMethod" className="form-label">Payment Method</label>
-                  <select
-                    id="paymentMethod"
-                    name="paymentMethod"
-                    value={formData.paymentMethod}
-                    onChange={handleChange}
-                    className="form-input"
-                  >
-                    <option value="credit_card">Credit Card</option>
-                    <option value="debit_card">Debit Card</option>
-                    <option value="paypal">PayPal</option>
-                    <option value="cash">Cash on Delivery</option>
-                  </select>
+                <div className="cash-payment-info">
+                  <div className="cash-payment-icon">💵</div>
+                  <div className="cash-payment-details">
+                    <h3>Cash on Delivery</h3>
+                    <p>Pay with cash when you receive your order</p>
+                    <p className="cash-amount-display">Total to pay in cash: <strong>₹{total.toFixed(2)}</strong></p>
+                  </div>
                 </div>
-                
-                {(formData.paymentMethod === 'credit_card' || formData.paymentMethod === 'debit_card') && (
-                  <>
-                    <div className="form-group">
-                      <label htmlFor="cardNumber" className="form-label">Card Number</label>
-                      <input
-                        type="text"
-                        id="cardNumber"
-                        name="cardNumber"
-                        value={formData.cardNumber}
-                        onChange={handleChange}
-                        className="form-input"
-                        placeholder="1234 5678 9012 3456"
-                        maxLength="19"
-                      />
-                    </div>
-                    
-                    <div className="form-row">
-                      <div className="form-group">
-                        <label htmlFor="cardExpiry" className="form-label">Expiry Date</label>
-                        <input
-                          type="text"
-                          id="cardExpiry"
-                          name="cardExpiry"
-                          value={formData.cardExpiry}
-                          onChange={handleChange}
-                          className="form-input"
-                          placeholder="MM/YY"
-                          maxLength="5"
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label htmlFor="cardCvv" className="form-label">CVV</label>
-                        <input
-                          type="text"
-                          id="cardCvv"
-                          name="cardCvv"
-                          value={formData.cardCvv}
-                          onChange={handleChange}
-                          className="form-input"
-                          placeholder="123"
-                          maxLength="4"
-                        />
-                      </div>
-                    </div>
-                  </>
-                )}
+                <input
+                  type="hidden"
+                  name="paymentMethod"
+                  value="cash"
+                />
               </div>
               
               <button 
@@ -626,8 +558,12 @@ const Checkout = () => {
                 className="btn btn-primary btn-place-order"
                 disabled={loading}
               >
-                {loading ? 'Placing Order...' : `Place Order - ₹${total.toFixed(2)}`}
+                {loading ? 'Placing Order...' : `Place Order - Pay ₹${total.toFixed(2)} in Cash`}
               </button>
+              
+              <p className="cash-terms">
+                By placing this order, you agree to pay the total amount in cash upon delivery.
+              </p>
             </form>
           </div>
           
@@ -683,10 +619,20 @@ const Checkout = () => {
                   <span>₹{tipAmount.toFixed(2)}</span>
                 </div>
               )}
-              <div className="summary-row total">
-                <span>Total:</span>
+              <div className="summary-row total cash-total">
+                <span>Total (Cash):</span>
                 <span>₹{total.toFixed(2)}</span>
               </div>
+            </div>
+            
+            <div className="cash-instructions">
+              <h4>📝 Cash Payment Instructions</h4>
+              <ul>
+                <li>Please have exact change ready</li>
+                <li>The delivery person may not have change for large bills</li>
+                <li>Count your cash before handing it over</li>
+                <li>Ask for a receipt if needed</li>
+              </ul>
             </div>
           </div>
         </div>

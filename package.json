@@ -2,40 +2,26 @@
   "name": "foodiehub-frontend",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:3000",
+  "engines": {
+    "node": "18.x || 20.x",
+    "npm": "9.x || 10.x"
+  },
   "dependencies": {
-    "@testing-library/jest-dom": "^6.8.0",
-    "@testing-library/react": "^16.3.0",
-    "@testing-library/user-event": "^13.5.0",
-    "aos": "^2.3.4",
-    "axios": "^1.12.2",
+    "axios": "^1.6.7",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.30.2",
-    "react-scripts": "5.0.1",
-    "web-vitals": "^2.1.4"
-  },
-  "devDependencies": {
-    "baseline-browser-mapping": "^2.8.29",
-    "gh-pages": "^6.3.0"
-  },
-  "homepage": ".",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/vijaykarthik06/FoodieHub.git"
+    "react-router-dom": "^6.20.1",
+    "react-scripts": "5.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "react-scripts build 2>/dev/null || react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
-      "react-app",
-      "react-app/jest"
+      "react-app"
     ]
   },
   "browserslist": {
@@ -49,5 +35,13 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "overrides": {
+    "workbox-webpack-plugin": {
+      "workbox-google-analytics": "6.6.0"
+    }
+  },
+  "devDependencies": {
+    "baseline-browser-mapping": "^2.9.18"
   }
 }

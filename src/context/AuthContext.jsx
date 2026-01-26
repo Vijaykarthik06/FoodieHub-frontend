@@ -1,20 +1,23 @@
-// AuthContext.jsx - UPDATED WITH CORRECT API_URL
+// AuthContext.jsx - FIXED VERSION
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 
-// ✅ CORRECT API_URL configuration
-// Choose ONE of these options:
-
-// OPTION 1: For local development (if backend runs on port 5000)
+// ✅ FIX: Ensure API_URL ends with /api
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
-// OPTION 2: For Render deployment
-// const API_URL = 'https://foodiehub-backend-7ohz.onrender.com/api';
-
-// OPTION 3: Auto-detect based on environment
-// const API_URL = process.env.NODE_ENV === 'production' 
-//   ? 'https://foodiehub-backend-7ohz.onrender.com/api'
-//   : 'http://localhost:5000/api';
+// Make sure API_URL ends with /api
+const getApiUrl = () => {
+  let url = API_URL;
+  // Remove trailing slash if present
+  if (url.endsWith('/')) {
+    url = url.slice(0, -1);
+  }
+  // Ensure it ends with /api
+  if (!url.endsWith('/api')) {
+    url = url + '/api';
+  }
+  return url;
+};
 
 const AuthContext = createContext();
 
@@ -30,22 +33,25 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  
+  const API_BASE_URL = getApiUrl();
 
   // Debug: Log the API configuration
   useEffect(() => {
     console.log('🔧 AuthContext initialized');
-    console.log('🔧 API_URL:', API_URL);
-    console.log('🔧 Example endpoints:');
-    console.log(`   Login: ${API_URL}/auth/login`);
-    console.log(`   Register: ${API_URL}/auth/register`);
-    console.log(`   Health: ${API_URL}/health`);
+    console.log('🔧 API_BASE_URL:', API_BASE_URL);
+    console.log('🔧 Environment:', process.env.NODE_ENV);
+    console.log('🔧 Full endpoints:');
+    console.log(`   Login: ${API_BASE_URL}/auth/login`);
+    console.log(`   Register: ${API_BASE_URL}/auth/register`);
+    console.log(`   Health: ${API_BASE_URL}/health`);
   }, []);
 
   // ✅ Health check backend connection
   const checkBackendHealth = async () => {
     try {
       console.log('🔍 Testing backend connection...');
-      const healthResponse = await fetch(`${API_URL}/health`, {
+      const healthResponse = await fetch(`${API_BASE_URL}/health`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -59,13 +65,13 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // ✅ Register function - FIXED URL
+  // ✅ Register function - FIXED
   const register = async (name, email, password, phone = '') => {
     try {
       setError(null);
-      console.log(`📝 Registering → ${API_URL}/auth/register`);
+      console.log(`📝 Registering → ${API_BASE_URL}/auth/register`);
       
-      const response = await fetch(`${API_URL}/auth/register`, {
+      const response = await fetch(`${API_BASE_URL}/auth/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -74,26 +80,19 @@ export const AuthProvider = ({ children }) => {
       });
 
       console.log('📨 Registration response status:', response.status);
-      const responseText = await response.text();
-      console.log('📨 Registration response text:', responseText);
       
-      let data;
-      try {
-        data = JSON.parse(responseText);
-        console.log('📨 Registration parsed data:', data);
-      } catch (parseError) {
-        console.error('🔴 Failed to parse response:', parseError);
-        throw new Error('Invalid server response');
-      }
-
       if (!response.ok) {
-        throw new Error(data.message || 'Registration failed');
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.message || `Registration failed (${response.status})`);
       }
 
+      const data = await response.json();
+      
       if (data.success && data.token) {
         // Save token to localStorage
         localStorage.setItem('token', data.token);
         localStorage.setItem('user', JSON.stringify(data.user));
+        localStorage.setItem('userEmail', data.user.email);
         
         // Set user state
         setUser(data.user);
@@ -113,13 +112,13 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // ✅ Login function - FIXED URL
+  // ✅ Login function - FIXED
   const login = async (email, password) => {
     try {
       setError(null);
-      console.log(`🔐 Logging in → ${API_URL}/auth/login`);
+      console.log(`🔐 Logging in → ${API_BASE_URL}/auth/login`);
       
-      const response = await fetch(`${API_URL}/auth/login`, {
+      const response = await fetch(`${API_BASE_URL}/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -128,26 +127,19 @@ export const AuthProvider = ({ children }) => {
       });
 
       console.log('📨 Login response status:', response.status);
-      const responseText = await response.text();
-      console.log('📨 Login response text:', responseText);
       
-      let data;
-      try {
-        data = JSON.parse(responseText);
-        console.log('📨 Login parsed data:', data);
-      } catch (parseError) {
-        console.error('🔴 Failed to parse response:', parseError);
-        throw new Error('Invalid server response');
-      }
-
       if (!response.ok) {
-        throw new Error(data.message || 'Login failed');
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.message || `Login failed (${response.status})`);
       }
 
+      const data = await response.json();
+      
       if (data.success && data.token) {
         // Save token to localStorage
         localStorage.setItem('token', data.token);
         localStorage.setItem('user', JSON.stringify(data.user));
+        localStorage.setItem('userEmail', data.user.email);
         
         // Set user state
         setUser(data.user);
@@ -171,6 +163,7 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
+    localStorage.removeItem('userEmail');
     delete axios.defaults.headers.common['Authorization'];
     setUser(null);
     console.log('✅ User logged out');
@@ -187,8 +180,8 @@ export const AuthProvider = ({ children }) => {
 
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       
-      console.log(`👤 Getting current user → ${API_URL}/auth/me`);
-      const response = await axios.get(`${API_URL}/auth/me`);
+      console.log(`👤 Getting current user → ${API_BASE_URL}/auth/me`);
+      const response = await axios.get(`${API_BASE_URL}/auth/me`);
       
       if (response.data.success) {
         setUser(response.data.user);
@@ -209,8 +202,8 @@ export const AuthProvider = ({ children }) => {
   // ✅ Update user profile
   const updateProfile = async (userData) => {
     try {
-      console.log(`✏️ Updating profile → ${API_URL}/auth/me`);
-      const response = await axios.put(`${API_URL}/auth/me`, userData);
+      console.log(`✏️ Updating profile → ${API_BASE_URL}/auth/me`);
+      const response = await axios.put(`${API_BASE_URL}/auth/me`, userData);
       
       if (response.data.success) {
         const updatedUser = response.data.user;
@@ -249,6 +242,7 @@ export const AuthProvider = ({ children }) => {
     updateProfile,
     clearError,
     checkBackendHealth,
+    apiUrl: API_BASE_URL // For debugging
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
