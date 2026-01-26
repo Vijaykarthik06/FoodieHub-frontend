@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
-import { useAuth } from './context/AuthContext';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -16,21 +16,31 @@ import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import Orders from './pages/Orders';
 import Profile from './pages/Profile';
-import ProtectedRoute from './components/ProtectedRoute';
 import OrderSuccess from './pages/OrderSuccess';
+
+import ProtectedRoute from './components/ProtectedRoute';
 import ScrollToTop from './components/ScrollToTop';
-import './App.css';
-import axios from 'axios';
+
 import DebugDatabase from './components/DebugDatabase';
 import DebugCheckout from './components/DebugCheckout';
 import TestEmail from './components/TestEmail';
 
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
-
+import './App.css';
 
 function App() {
+
+  useEffect(() => {
+    AOS.init({
+      duration: 800,
+      once: true,
+      easing: 'ease-in-out',
+    });
+  }, []);
+
   return (
-    // REMOVED basename completely for development
     <BrowserRouter>
       <ScrollToTop />
 
@@ -50,10 +60,10 @@ function App() {
                 <Route path="/product/:id" element={<ProductDetail />} />
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/order-success" element={<OrderSuccess />} />
+
                 <Route path="/debug-checkout" element={<DebugCheckout />} />
                 <Route path="/debug-db" element={<DebugDatabase />} />
                 <Route path="/test-email" element={<TestEmail />} />
-
 
                 <Route
                   path="/checkout"
